@@ -321,6 +321,13 @@ for key, group in grouped:
     rects = ax.patches
     for rect in rects:
         height = rect.get_height()
+        print("height is: ", height)
+# Export of the data as requested by Denisa Gheorge
+#        import csv
+#        myFile = open('csv_target.csv', 'w')
+#        with myFile:
+#           writer = csv.writer(myFile)
+#           writer.writerows(height)
         ax.text(rect.get_x()+rect.get_width()/2., 1.01*height, str(round(height*100,1)) + '%',
                 ha='center', va='bottom', color=num_color, fontweight='bold')
 
@@ -552,11 +559,22 @@ def gains(data,decile_by,target,score):
     agg1['DECILE'] = agg1['DECILE']*10
     agg1['LIFT'] = agg1['DIST_TAR']/agg1['DECILE']
     plots(agg1,target,'Distribution')
+    # Export of the data as requested by Denisa Gheorge
+#    import csv
+#    myFile = open('csv_target.csv', 'w')
+#    with myFile:
+#       writer = csv.writer(myFile)
+#       writer.writerows(agg1['PRED'])
+
 
 lift_train = pd.concat([features_train,scores_train],axis=1)
-lift_test = pd.concat([features_test,scores_test],axis=1)
 gains(lift_train,['DECILE'],'TARGET','SCORE')
 plt.show() # its display the heatmap
+
+lift_test = pd.concat([features_test,scores_test],axis=1)
+gains(lift_test,['DECILE'],'TARGET','SCORE')
+plt.show() # its display the heatmap
+
 # some of the actual results have a different distribution then the predicted one
 #due to the fact that we are included some of the values in the algorithms that
 #are always 100% or not have huge impact.
